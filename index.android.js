@@ -9,44 +9,73 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Navigator,
+  TouchableHighlight
 } from 'react-native';
 
 class myProject extends Component {
+  constructor () {
+    super()
+    this.goBack = this.goBack.bind(this)
+    this.navigate = this.navigate.bind(this)
+    this.renderScene = this.renderScene.bind(this)
+  }
+  goBack () {
+    this.refs.navigator.pop()
+  }
+  navigate (component) {
+    this.refs.navigator.push({
+      component,
+      passProps: {
+        navigate: this.navigate,
+        goBack: this.goBack
+      }
+    })
+  }
+  renderScene (route, navigator) {
+    return <route.component {...route.passProps} />
+  }
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
+      <Navigator
+        renderScene={this.renderScene}
+        ref='navigator'
+        initialRoute={{ name: 'Home', component: Home, passProps: {navigate: this.navigate} }} />
     );
   }
 }
 
+const Home = ({navigate}) => (
+  <View style={styles.container}>
+    <Text>Hello From Home</Text>
+    <Button onPress={() => navigate(About)} title='Go To About' />
+  </View>
+)
+
+const About = ({goBack}) => (
+  <View style={styles.container}>
+    <Text>Hello From About</Text>
+    <Button onPress={goBack} title='Go Back' />
+  </View>
+)
+
+const Button = ({onPress, title}) => (
+  <TouchableHighlight style={styles.button} onPress={onPress}>
+    <Text>{title}</Text>
+  </TouchableHighlight>
+)
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
+    marginTop: 60
+  },
+  button: {
+    height: 70,
+    backgroundColor: '#ededed',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    justifyContent: 'center'
+  }
 });
 
 AppRegistry.registerComponent('myProject', () => myProject);
