@@ -4,7 +4,7 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -12,7 +12,7 @@ import {
   View,
   Navigator,
   TouchableHighlight
-} from 'react-native';
+} from 'react-native'
 
 class myProject extends Component {
   constructor () {
@@ -36,13 +36,13 @@ class myProject extends Component {
   renderScene (route, navigator) {
     return <route.component {...route.passProps} />
   }
-  render() {
+  render () {
     return (
       <Navigator
         renderScene={this.renderScene}
         ref='navigator'
         initialRoute={{ name: 'Home', component: Home, passProps: {navigate: this.navigate} }} />
-    );
+    )
   }
 }
 
@@ -76,6 +76,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   }
-});
+})
 
-AppRegistry.registerComponent('myProject', () => myProject);
+AppRegistry.registerComponent('myProject', () => myProject)
